@@ -2,6 +2,8 @@ package tomerbu.edu.testreveal;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -12,9 +14,6 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.CycleInterpolator;
-import android.view.animation.OvershootInterpolator;
 
 public class RevealDemo extends AppCompatActivity {
 
@@ -50,17 +49,25 @@ public class RevealDemo extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_reveal:
-                animateMenu();
-                return true;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    animateMenu();
+                    return true;
+                }
         }
         return super.onOptionsItemSelected(item);
     }
 
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void animateMenu() {
         final ViewGroup layout = (ViewGroup) findViewById(R.id.fabContainer);
         int startRadius, endRadius;
+
         final int visibility = isMenuVisible ? View.INVISIBLE : View.VISIBLE;
+
+        //The X Center of the circle
         int cx = (int) (layout.getWidth() - fab.getWidth() * 1.4);
+        //The Y Center of the circle
         int cy = 0;
         if (!isMenuVisible) {
             layout.setVisibility(visibility);
